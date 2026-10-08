@@ -18,29 +18,10 @@
 
 ## Локальна перевірка та запуск
 
-1. Відновлення залежностей:
-
-'dotnet restore'
-
-
-2. Компіляція проєкту:
-
-'dotnet build --no-restore'
-
-
-3. Запуск модульних тестів:
-
-'dotnet test --no-build'
-
-
-4. Запуск серверного API:
-
-'dotnet run --project src/ServiceCenter.Api'
-
-
-5. Запуск консольного клієнта:
-
-
-'dotnet run --project src/ServiceCenter.Client'
+1. Відновлення залежностей: `dotnet restore`
+2. Компіляція проєкту: `dotnet build --no-restore`
+3. Запуск модульних тестів: `dotnet test --no-build`
+4. Запуск серверного API: `dotnet run --project src/ServiceCenter.Api`
+5. Запуск консольного клієнта: `dotnet run --project src/ServiceCenter.Client`
 
 
