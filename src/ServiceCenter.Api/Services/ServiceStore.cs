@@ -131,7 +131,6 @@ public sealed class ServiceStore
     }
 
     // Приймається лише назва статусу (Accepted, InProgress, Ready, Issued) без урахування регістру.
-    // Числові значення ("3", "99") Enum.TryParse теж розібрав би, тому їх відхиляємо явно.
     private static bool TryParseStatus(string? value, out OrderStatus status)
     {
         status = default;
