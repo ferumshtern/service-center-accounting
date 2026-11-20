@@ -1,6 +1,9 @@
-namespace ServiceCenter.Api.Models;
+﻿namespace ServiceCenter.Api.Models;
 
-// Агрегат замовлення (UC-01). Колекції Items і History змінюються лише методами класу.
+
+// Агрегат замовлення. Усі правила життєвого циклу (FR-04) та додавання позицій
+// з перерахунком TotalCost (FR-03) перевіряються тут; порушення правила —
+// DomainRuleException із кодом помилки API.
 
 public sealed class RepairOrder
 {
@@ -47,6 +50,55 @@ public sealed class RepairOrder
     public void AssignEngineer(int engineerId)
     {
         EngineerId = engineerId;
+    }
+
+    public static bool CanTransition(OrderStatus current, OrderStatus next) =>
+        (current, next) switch
+        {
+            (OrderStatus.Accepted, OrderStatus.InProgress) => true,
+            (OrderStatus.InProgress, OrderStatus.Ready) => true,
+            (OrderStatus.Ready, OrderStatus.InProgress) => true,
+            (OrderStatus.Ready, OrderStatus.Issued) => true,
+            _ => false
+        };
+
+    // UC-02 / UC-03 (FR-04, AC-04)
+    public void ChangeStatus(OrderStatus newStatus, DateTimeOffset changedAt)
+    {
+        if (Status == OrderStatus.Issued)
+            throw new DomainRuleException("order_already_issued");
+
+        if (!CanTransition(Status, newStatus))
+            throw new DomainRuleException("invalid_status_transition");
+
+        Status = newStatus;
+        AddHistory(newStatus, changedAt);
+    }
+
+    // UC-02 (FR-03, AC-03, AC-04): спочатку перевіряються всі правила, лише потім
+    // змінюється стан — при відмові замовлення залишається незмінним.
+    public void AddRepairItem(string name, int quantity, decimal unitPrice, string? diagnosticNotes = null)
+    {
+        if (string.IsNullOrWhiteSpace(name) || quantity <= 0 || unitPrice < 0)
+            throw new DomainRuleException("invalid_item_values");
+
+        if (Status == OrderStatus.Issued)
+            throw new DomainRuleException("order_already_issued");
+
+        if (Status != OrderStatus.InProgress)
+            throw new DomainRuleException("invalid_status_warning");
+
+        if (!string.IsNullOrWhiteSpace(diagnosticNotes))
+            DiagnosticNotes = diagnosticNotes.Trim();
+
+        _items.Add(new RepairItem
+        {
+            Id = _items.Count + 1,
+            Name = name.Trim(),
+            Quantity = quantity,
+            UnitPrice = unitPrice
+        });
+        CalculateTotalCost();
     }
 
     public void CalculateTotalCost()

@@ -1,4 +1,4 @@
-using ServiceCenter.Api.Contracts;
+﻿using ServiceCenter.Api.Contracts;
 using ServiceCenter.Api.Services;
 using Xunit;
 
@@ -78,4 +78,51 @@ public sealed class ServiceStoreTests
         Assert.Equal("SC-0001", acceptedOrders![0].OrderNumber);
     }
 
+    // 5. UC-02 (FR-03, AC-03, AC-07): Додавання позицій ремонту, автопідрахунок TotalCost та відмова при від'ємній ціні
+    [Fact]
+    public void AddRepairItem_ValidItems_CalculatesTotalCostAndRejectsNegativePrice_AC03()
+    {
+        var store = new ServiceStore();
+        var (_, _, _, created) = store.CreateOrder(ValidOrderRequest());
+        store.ChangeStatus(created!.Id, new ChangeStatusRequest("InProgress"));
+
+        // Додавання двох валідних позицій та перевірка автоматичного перерахунку суми (600 + 800 = 1400)
+        store.AddRepairItem(created.Id, new AddRepairItemRequest("Заміна роз'єму", "Роз'єм Type-C", 1, 600m));
+        var (ok2, _, updated) = store.AddRepairItem(created.Id, new AddRepairItemRequest(null, "Робота майстра", 1, 800m));
+
+        Assert.True(ok2);
+        Assert.Equal(1400m, updated!.TotalCost);
+
+        // Спроба додати позицію з від'ємною ціною (відмова без зміни TotalCost)
+        var (badOk, badCode, _) = store.AddRepairItem(created.Id, new AddRepairItemRequest(null, "Помилка", 1, -100m));
+        Assert.False(badOk);
+        Assert.Equal("invalid_item_values", badCode);
+        Assert.Equal(1400m, store.GetOrderById(created.Id)!.TotalCost);
+    }
+
+    // 6. UC-02 & UC-03 (FR-04, AC-04, AC-07): Контроль послідовності статусів та блокування редагування після видачі (Issued)
+    [Fact]
+    public void ChangeStatus_InvalidTransitionOrEditingIssuedOrder_ReturnsConflict_AC04()
+    {
+        var store = new ServiceStore();
+        var (_, _, _, created) = store.CreateOrder(ValidOrderRequest());
+
+        // Спроба перескочити з Accepted одразу в Issued (відмова без зміни статусу)
+        var (skipOk, skipCode, _) = store.ChangeStatus(created!.Id, new ChangeStatusRequest("Issued"));
+        Assert.False(skipOk);
+        Assert.Equal("invalid_status_transition", skipCode);
+        Assert.Equal("Accepted", store.GetOrderById(created.Id)!.Status);
+
+        // Послідовний перехід за життєвим циклом до Issued
+        store.ChangeStatus(created.Id, new ChangeStatusRequest("InProgress"));
+        store.AddRepairItem(created.Id, new AddRepairItemRequest("Діагностика", "Чистка", 1, 500m));
+        store.ChangeStatus(created.Id, new ChangeStatusRequest("Ready"));
+        store.ChangeStatus(created.Id, new ChangeStatusRequest("Issued"));
+
+        // Спроба додати роботу після видачі (Issued) — відмова без зміни TotalCost
+        var (editIssuedOk, editCode, _) = store.AddRepairItem(created.Id, new AddRepairItemRequest(null, "Деталь", 1, 200m));
+        Assert.False(editIssuedOk);
+        Assert.Equal("order_already_issued", editCode);
+        Assert.Equal(500m, store.GetOrderById(created.Id)!.TotalCost);
+    }
 }
