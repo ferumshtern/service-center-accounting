@@ -1,4 +1,4 @@
-using ServiceCenter.Api.Contracts;
+﻿using ServiceCenter.Api.Contracts;
 using ServiceCenter.Api.Models;
 
 namespace ServiceCenter.Api.Services;
@@ -92,6 +92,58 @@ public sealed class ServiceStore
         }
     }
 
+    // UC-02: Фіксація діагностики та додавання позицій ремонту з перерахунком TotalCost (FR-03, AC-03).
+    // Правила перевіряє RepairOrder.AddRepairItem.
+    public (bool Success, string? ErrorCode, OrderReceiptDto? Order) AddRepairItem(int orderId, AddRepairItemRequest request)
+    {
+        if (request is null)
+            return (false, "invalid_item_values", null);
+
+        lock (_gate)
+        {
+            var order = _orders.FirstOrDefault(o => o.Id == orderId);
+            if (order is null)
+                return (false, "order_not_found", null);
+
+            try
+            {
+                order.AddRepairItem(request.Name, request.Quantity, request.UnitPrice, request.DiagnosticNotes);
+            }
+            catch (DomainRuleException ex)
+            {
+                return (false, ex.Code, null);
+            }
+
+            return (true, null, MapToReceiptDto(order));
+        }
+    }
+
+    // UC-02 / UC-03: Послідовна зміна статусу замовлення (Євгенія: FR-04, AC-04).
+    // Правила переходу перевіряє RepairOrder.ChangeStatus.
+    public (bool Success, string? ErrorCode, OrderReceiptDto? Order) ChangeStatus(int orderId, ChangeStatusRequest req)
+    {
+        if (!TryParseStatus(req.NewStatus, out var targetStatus))
+            return (false, "invalid_status_value", null);
+
+        lock (_gate)
+        {
+            var order = _orders.SingleOrDefault(o => o.Id == orderId);
+            if (order is null)
+                return (false, "order_not_found", null);
+
+            try
+            {
+                order.ChangeStatus(targetStatus, DateTimeOffset.UtcNow);
+            }
+            catch (DomainRuleException ex)
+            {
+                return (false, ex.Code, null);
+            }
+
+            return (true, null, MapToReceiptDto(order));
+        }
+    }
+
     // UC-04: Пошук за номером замовлення та фільтрація за статусом (FR-05, AC-05)
     public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber)
     {
@@ -130,7 +182,7 @@ public sealed class ServiceStore
         }
     }
 
-    // Приймається лише назва статусу (Accepted, InProgress, Ready, Issued) без урахування регістру.
+
     private static bool TryParseStatus(string? value, out OrderStatus status)
     {
         status = default;

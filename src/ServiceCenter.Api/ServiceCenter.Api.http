@@ -1,6 +1,49 @@
-@ServiceCenter.Api_HostAddress = http://localhost:5118
+@ServiceCenter.Api_HostAddress = http://localhost:5080
 
-GET {{ServiceCenter.Api_HostAddress}}/weatherforecast/
+GET {{ServiceCenter.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{ServiceCenter.Api_HostAddress}}/api/engineers
+Accept: application/json
+
+###
+
+# UC-01 (AC-01)
+POST {{ServiceCenter.Api_HostAddress}}/api/orders
+Content-Type: application/json
+
+{
+  "clientFullName": "Петренко Іван Васильович",
+  "clientPhone": "+380501234567",
+  "deviceBrand": "Apple",
+  "deviceModel": "iPhone 15 Pro",
+  "serialNumber": "SN-IPH15-9901",
+  "issueDescription": "Розбитий дисплей",
+  "engineerId": 1
+}
+
+###
+
+# UC-03 (AC-04)
+PATCH {{ServiceCenter.Api_HostAddress}}/api/orders/1/status
+Content-Type: application/json
+
+{ "newStatus": "InProgress" }
+
+###
+
+# UC-02 (AC-03)
+POST {{ServiceCenter.Api_HostAddress}}/api/orders/1/items
+Content-Type: application/json
+
+{ "name": "Заміна дисплея", "quantity": 1, "unitPrice": 8500, "diagnosticNotes": "Пошкоджено матрицю" }
+
+###
+
+# UC-04 (AC-05)
+GET {{ServiceCenter.Api_HostAddress}}/api/orders?status=InProgress&orderNumber=SC-0001
 Accept: application/json
 
 ###

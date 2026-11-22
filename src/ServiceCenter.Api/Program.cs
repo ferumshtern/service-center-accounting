@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using ServiceCenter.Api.Contracts;
 using ServiceCenter.Api.Infrastructure;
 using ServiceCenter.Api.Services;
@@ -57,6 +57,20 @@ app.MapPost("/api/orders", (CreateOrderRequest request, ServiceStore store) =>
     return success
         ? Results.Created($"/api/orders/{order!.Id}", order)
         : ApiErrors.Result(errorCode!, errorDetail);
+});
+
+// UC-02: Додавання результатів діагностики та позицій ремонту (FR-03, AC-03)
+app.MapPost("/api/orders/{id:int}/items", (int id, AddRepairItemRequest request, ServiceStore store) =>
+{
+    var (success, errorCode, order) = store.AddRepairItem(id, request);
+    return success ? Results.Ok(order) : ApiErrors.Result(errorCode!);
+});
+
+// UC-02 & UC-03: Переведення статусу замовлення (FR-04, AC-04)
+app.MapPatch("/api/orders/{id:int}/status", (int id, ChangeStatusRequest request, ServiceStore store) =>
+{
+    var (success, errorCode, order) = store.ChangeStatus(id, request);
+    return success ? Results.Ok(order) : ApiErrors.Result(errorCode!);
 });
 
 
