@@ -3,7 +3,9 @@ using ServiceCenter.Api.Models;
 
 namespace ServiceCenter.Api.Services;
 
-// Контракт сховища замовлень
+// Контракт сховища замовлень (ЛР №5). Обробники HTTP-запитів працюють лише з ним
+// і не знають, де зберігаються дані: у пам'яті (InMemoryOrderRepository) чи в базі.
+// Обидві реалізації повертають однакові результати й коди відмов.
 public interface IOrderRepository
 {
     IReadOnlyList<ServiceEngineer> GetEngineers();
@@ -22,4 +24,7 @@ public interface IOrderRepository
 
     OrderReceiptDto? GetOrderById(int orderId);
 
+    // Спринт S1: історія ремонтів пристрою за серійним номером (від найстарішого замовлення).
+    // device_not_found — пристрій з таким серійним номером ще не обслуговувався.
+    (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetDeviceHistory(string serialNumber);
 }

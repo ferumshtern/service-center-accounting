@@ -1,5 +1,7 @@
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using ServiceCenter.Api.Contracts;
+using ServiceCenter.Api.Data;
 using ServiceCenter.Api.Infrastructure;
 using ServiceCenter.Api.Services;
 
@@ -8,13 +10,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureHttpJsonOptions(o =>
     o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
 
-// Обробники працюють через контракт IOrderRepository. Сховище в пам'яті — Singleton,
-// щоб його записи були доступні наступним запитам протягом роботи процесу.
-builder.Services.AddSingleton<IOrderRepository, InMemoryOrderRepository>();
+// Постійне збереження (ЛР №5): контекст бази та сховище SQLite створюються контейнером
+// залежностей окремо для кожного HTTP-запиту (Scoped). Обробники отримують лише контракт
+// IOrderRepository; реалізація для пам'яті (InMemoryOrderRepository) лишилась для модульних тестів.
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(DatabaseConnection.Resolve(builder.Configuration)));
+builder.Services.AddScoped<IOrderRepository, SqliteOrderRepository>();
 
 builder.Services.Configure<RouteHandlerOptions>(o => o.ThrowOnBadRequest = true);
 
 var app = builder.Build();
+
+// Сервер не стартує з базою, до якої не застосовано міграції (див. README, розділ про базу даних).
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    if (db.Database.GetPendingMigrations().Any())
+        throw new InvalidOperationException(
+            "База даних не створена або застаріла. Виконайте: dotnet ef database update --project src/ServiceCenter.Api");
+}
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -72,6 +86,13 @@ app.MapPatch("/api/orders/{id:int}/status", (int id, ChangeStatusRequest request
 {
     var (success, errorCode, order) = store.ChangeStatus(id, request);
     return success ? Results.Ok(order) : ApiErrors.Result(errorCode!);
+});
+
+// Спринт S1: історія ремонтів пристрою за серійним номером
+app.MapGet("/api/devices/{serialNumber}/orders", (string serialNumber, IOrderRepository store) =>
+{
+    var (success, errorCode, orders) = store.GetDeviceHistory(serialNumber);
+    return success ? Results.Ok(orders) : ApiErrors.Result(errorCode!);
 });
 
 app.Run();

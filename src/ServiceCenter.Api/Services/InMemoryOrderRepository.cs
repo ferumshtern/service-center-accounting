@@ -3,7 +3,9 @@ using ServiceCenter.Api.Models;
 
 namespace ServiceCenter.Api.Services;
 
-// Реалізація контракту сховища в пам'яті серверного процесу
+// Реалізація контракту сховища в пам'яті серверного процесу (v1.0.0).
+// Реєструється як Singleton, щоб дані були спільними для всіх запитів; після
+// зупинки процесу дані втрачаються. Використовується модульними тестами.
 public sealed class InMemoryOrderRepository : IOrderRepository
 {
     private readonly object _gate = new();
@@ -172,6 +174,30 @@ public sealed class InMemoryOrderRepository : IOrderRepository
         {
             var order = _orders.SingleOrDefault(o => o.Id == orderId);
             return order is null ? null : MapToReceiptDto(order);
+        }
+    }
+
+    // Спринт S1: історія ремонтів пристрою за серійним номером
+    public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetDeviceHistory(string serialNumber)
+    {
+        var serial = serialNumber?.Trim() ?? "";
+
+        lock (_gate)
+        {
+            var deviceIds = _devices
+                .Where(d => string.Equals(d.SerialNumber, serial, StringComparison.OrdinalIgnoreCase))
+                .Select(d => d.Id)
+                .ToHashSet();
+
+            if (deviceIds.Count == 0)
+                return (false, "device_not_found", null);
+
+            var result = _orders
+                .Where(o => deviceIds.Contains(o.DeviceId))
+                .OrderBy(o => o.Id)
+                .Select(MapToReceiptDto)
+                .ToArray();
+            return (true, null, result);
         }
     }
 
