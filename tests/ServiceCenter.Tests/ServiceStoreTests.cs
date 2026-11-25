@@ -1,10 +1,10 @@
-using ServiceCenter.Api.Contracts;
+﻿using ServiceCenter.Api.Contracts;
 using ServiceCenter.Api.Services;
 using Xunit;
 
 namespace ServiceCenter.Tests;
 
-public sealed class InMemoryOrderRepositoryTests
+public sealed class ServiceStoreTests
 {
     private static CreateOrderRequest ValidOrderRequest(string serial = "SN-TEST-001") =>
         new(
@@ -20,7 +20,7 @@ public sealed class InMemoryOrderRepositoryTests
     [Fact]
     public void CreateOrder_ValidData_CreatesAcceptedOrderWithZeroCost_AC01()
     {
-        var store = new InMemoryOrderRepository();
+        var store = new ServiceStore();
 
         var (success, code, _, order) = store.CreateOrder(ValidOrderRequest());
 
@@ -37,7 +37,7 @@ public sealed class InMemoryOrderRepositoryTests
     [Fact]
     public void CreateOrder_DuplicateActiveSerialNumber_ReturnsConflictAndKeepsSingleOrder_AC02()
     {
-        var store = new InMemoryOrderRepository();
+        var store = new ServiceStore();
         store.CreateOrder(ValidOrderRequest("SN-DUP-100"));
 
         var (success, code, detail, duplicate) = store.CreateOrder(ValidOrderRequest("SN-DUP-100"));
@@ -53,7 +53,7 @@ public sealed class InMemoryOrderRepositoryTests
     [Fact]
     public void CreateOrder_EmptyRequiredFields_ReturnsInvalidRequest_AC07()
     {
-        var store = new InMemoryOrderRepository();
+        var store = new ServiceStore();
         var invalidReq = ValidOrderRequest() with { ClientFullName = "   " };
 
         var (success, code, detail, _) = store.CreateOrder(invalidReq);
@@ -67,7 +67,7 @@ public sealed class InMemoryOrderRepositoryTests
     [Fact]
     public void GetOrders_FilterByStatusAndNumber_ReturnsMatchingOrders_AC05()
     {
-        var store = new InMemoryOrderRepository();
+        var store = new ServiceStore();
         var (_, _, _, order1) = store.CreateOrder(ValidOrderRequest("SN-001"));
         store.CreateOrder(ValidOrderRequest("SN-002")); 
 
@@ -82,7 +82,7 @@ public sealed class InMemoryOrderRepositoryTests
     [Fact]
     public void AddRepairItem_ValidItems_CalculatesTotalCostAndRejectsNegativePrice_AC03()
     {
-        var store = new InMemoryOrderRepository();
+        var store = new ServiceStore();
         var (_, _, _, created) = store.CreateOrder(ValidOrderRequest());
         store.ChangeStatus(created!.Id, new ChangeStatusRequest("InProgress"));
 
@@ -104,7 +104,7 @@ public sealed class InMemoryOrderRepositoryTests
     [Fact]
     public void ChangeStatus_InvalidTransitionOrEditingIssuedOrder_ReturnsConflict_AC04()
     {
-        var store = new InMemoryOrderRepository();
+        var store = new ServiceStore();
         var (_, _, _, created) = store.CreateOrder(ValidOrderRequest());
 
         // Спроба перескочити з Accepted одразу в Issued (відмова без зміни статусу)
