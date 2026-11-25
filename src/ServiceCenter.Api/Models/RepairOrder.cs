@@ -1,4 +1,4 @@
-﻿namespace ServiceCenter.Api.Models;
+namespace ServiceCenter.Api.Models;
 
 
 // Агрегат замовлення. Усі правила життєвого циклу (FR-04) та додавання позицій
@@ -10,13 +10,13 @@ public sealed class RepairOrder
     private readonly List<RepairItem> _items = new();
     private readonly List<StatusHistory> _history = new();
 
-    public int Id { get; }
-    public string OrderNumber { get; }
-    public int ClientId { get; }
-    public int DeviceId { get; }
+    public int Id { get; private set; }
+    public string OrderNumber { get; private set; } = "";
+    public int ClientId { get; private set; }
+    public int DeviceId { get; private set; }
     public int EngineerId { get; private set; }
-    public DateTimeOffset CreatedAt { get; }
-    public string IssueDescription { get; }
+    public DateTimeOffset CreatedAt { get; private set; }
+    public string IssueDescription { get; private set; } = "";
     public string DiagnosticNotes { get; private set; } = "";
     public decimal TotalCost { get; private set; }
     public OrderStatus Status { get; private set; }
@@ -24,8 +24,12 @@ public sealed class RepairOrder
     public IReadOnlyList<RepairItem> Items => _items;
     public IReadOnlyList<StatusHistory> History => _history;
 
-    // UC-01 (FR-01, AC-01): нове замовлення завжди у статусі Accepted, TotalCost = 0,
-    // з першим записом в історії статусів.
+    // Для EF Core: відновлення збереженого замовлення з бази без повторного запису в історію.
+    private RepairOrder()
+    {
+    }
+
+    // UC-01 (FR-01, AC-01): нове замовлення завжди у статусі Accepted, TotalCost = 0, з першим записом в історії статусів.
     public RepairOrder(
         int id,
         string orderNumber,
@@ -33,18 +37,18 @@ public sealed class RepairOrder
         int deviceId,
         int engineerId,
         string issueDescription,
-        DateTimeOffset createdAt)
+        DateTimeOffset acceptedAt)
     {
         Id = id;
         OrderNumber = orderNumber;
         ClientId = clientId;
         DeviceId = deviceId;
         IssueDescription = issueDescription;
-        CreatedAt = createdAt;
+        CreatedAt = acceptedAt;
         AssignEngineer(engineerId);
 
         Status = OrderStatus.Accepted;
-        AddHistory(OrderStatus.Accepted, createdAt);
+        AddHistory(OrderStatus.Accepted, acceptedAt);
     }
 
     public void AssignEngineer(int engineerId)
@@ -75,7 +79,7 @@ public sealed class RepairOrder
         AddHistory(newStatus, changedAt);
     }
 
-    // UC-02 (FR-03, AC-03, AC-04): спочатку перевіряються всі правила, лише потім
+    // UC-02 (FR-03, AC-03, AC-04): спочатку перевіряються всі правила, потім
     // змінюється стан — при відмові замовлення залишається незмінним.
     public void AddRepairItem(string name, int quantity, decimal unitPrice, string? diagnosticNotes = null)
     {
