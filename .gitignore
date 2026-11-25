@@ -482,9 +482,3 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-
-# Локальна база SQLite (ЛР №5): файл бази в Git не потрапляє, схема відтворюється міграціями
-*.db
-*.db-shm
-*.db-wal
-*.db-journal
