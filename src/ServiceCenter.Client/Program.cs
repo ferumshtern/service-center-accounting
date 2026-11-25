@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -7,7 +7,7 @@ Console.OutputEncoding = Encoding.UTF8;
 var baseUrl = Environment.GetEnvironmentVariable("API_BASE_URL") ?? "http://localhost:5080";
 using var http = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
-Console.WriteLine($"=== Клієнт ServiceCenter v1.0 (Сервер: {baseUrl}) ===\n");
+Console.WriteLine($"=== Клієнт ServiceCenter (Сервер: {baseUrl}) ===\n");
 
 async Task<(int Status, string Body)> SendAsync(HttpMethod method, string url, object? payload = null)
 {
@@ -22,6 +22,15 @@ async Task<(int Status, string Body)> SendAsync(HttpMethod method, string url, o
     return ((int)resp.StatusCode, text);
 }
 
+async Task<int> CountOrdersAsync()
+{
+    var (_, body) = await SendAsync(HttpMethod.Get, "/api/orders");
+    using var list = JsonDocument.Parse(body);
+    return list.RootElement.GetArrayLength();
+}
+
+var serial = $"SN-IPH15-{DateTime.Now:yyyyMMddHHmmss}";
+
 // 1. UC-01 (Успіх, AC-01): Реєстрація нового замовлення
 Console.WriteLine("--- 1. UC-01 (AC-01): Успішна реєстрація замовлення ---");
 var (status1, body1) = await SendAsync(HttpMethod.Post, "/api/orders", new
@@ -30,7 +39,7 @@ var (status1, body1) = await SendAsync(HttpMethod.Post, "/api/orders", new
     clientPhone = "+380501234567",
     deviceBrand = "Apple",
     deviceModel = "iPhone 15 Pro",
-    serialNumber = "SN-IPH15-9901",
+    serialNumber = serial,
     issueDescription = "Розбитий дисплей, не працює сенсор",
     engineerId = 1
 });
@@ -38,6 +47,10 @@ var (status1, body1) = await SendAsync(HttpMethod.Post, "/api/orders", new
 if (status1 != 201) return;
 using var doc = JsonDocument.Parse(body1);
 int orderId = doc.RootElement.GetProperty("id").GetInt32();
+string orderNumber = doc.RootElement.GetProperty("orderNumber").GetString()!;
+
+Console.WriteLine("--- Кількість замовлень до відмов ---");
+int countBefore = await CountOrdersAsync();
 
 // 2. UC-01 (Відмова, AC-02): Спроба створити дублікат активного замовлення на той самий серійний номер
 Console.WriteLine("--- 2. UC-01 (AC-02): Відмова при дублюванні активного серійного номера ---");
@@ -47,7 +60,7 @@ await SendAsync(HttpMethod.Post, "/api/orders", new
     clientPhone = "+380670000000",
     deviceBrand = "Apple",
     deviceModel = "iPhone 15 Pro",
-    serialNumber = "SN-IPH15-9901",
+    serialNumber = serial,
     issueDescription = "Повторна заявка",
     engineerId = 2
 });
@@ -60,18 +73,19 @@ await SendAsync(HttpMethod.Post, "/api/orders", new
     clientPhone = "+380501234567",
     deviceBrand = "Apple",
     deviceModel = "iPhone 15 Pro",
-    serialNumber = "SN-NEW-0002",
+    serialNumber = $"{serial}-X",
     issueDescription = "Тест порожніх полів",
     engineerId = 1
 });
 
 // Перевірка незмінності стану після відмов
-Console.WriteLine("--- Перевірка стану після відмов (має бути рівно 1 замовлення) ---");
-await SendAsync(HttpMethod.Get, "/api/orders");
+Console.WriteLine("--- Перевірка стану після відмов (кількість замовлень не змінилась) ---");
+int countAfter = await CountOrdersAsync();
+Console.WriteLine($"Замовлень до відмов: {countBefore}, після: {countAfter}\n");
 
-// 4. UC-04 (Успіх, AC-05): Фільтрація замовлень за статусом та пошук за номером SC-0001
-Console.WriteLine("--- 4. UC-04 (AC-05): Пошук замовлення за номером SC-0001 та фільтр status=Accepted ---");
-await SendAsync(HttpMethod.Get, "/api/orders?status=Accepted&orderNumber=SC-0001");
+// 4. UC-04 (Успіх, AC-05): Фільтрація замовлень за статусом та пошук за номером
+Console.WriteLine($"--- 4. UC-04 (AC-05): Пошук замовлення за номером {orderNumber} та фільтр status=Accepted ---");
+await SendAsync(HttpMethod.Get, $"/api/orders?status=Accepted&orderNumber={orderNumber}");
 
 
 // 5. UC-02 (AC-04): Відмова при спробі перескочити статус Accepted -> Issued
@@ -123,6 +137,6 @@ await SendAsync(HttpMethod.Post, $"/api/orders/{orderId}/items", new
     unitPrice = 300
 });
 
-// 10. UC-04 (AC-05): Пошук замовлення за номером SC-0001 та фільтр status=Issued
-Console.WriteLine("--- 10. UC-04 (AC-05): Пошук замовлення за номером SC-0001 та фільтр status=Issued ---");
-await SendAsync(HttpMethod.Get, "/api/orders?status=Issued&orderNumber=SC-0001");
+// 10. UC-04 (AC-05): Пошук замовлення за номером та фільтр status=Issued
+Console.WriteLine($"--- 10. UC-04 (AC-05): Пошук замовлення за номером {orderNumber} та фільтр status=Issued ---");
+await SendAsync(HttpMethod.Get, $"/api/orders?status=Issued&orderNumber={orderNumber}");
