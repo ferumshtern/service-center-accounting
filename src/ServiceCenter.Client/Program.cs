@@ -29,6 +29,17 @@ async Task<int> CountOrdersAsync()
     return list.RootElement.GetArrayLength();
 }
 
+// Режим перевірки після перезапуску сервера (спринт S1):
+//   dotnet run --project src/ServiceCenter.Client -- history <серійний номер>
+if (args.Length == 2 && args[0] == "history")
+{
+    Console.WriteLine($"--- Історія ремонтів пристрою {args[1]} ---");
+    await SendAsync(HttpMethod.Get, $"/api/devices/{Uri.EscapeDataString(args[1])}/orders");
+    return;
+}
+
+// Дані зберігаються в базі й накопичуються між запусками, тому кожен прогін
+// використовує новий серійний номер, а номер замовлення бере з відповіді сервера.
 var serial = $"SN-IPH15-{DateTime.Now:yyyyMMddHHmmss}";
 
 // 1. UC-01 (Успіх, AC-01): Реєстрація нового замовлення
@@ -140,3 +151,26 @@ await SendAsync(HttpMethod.Post, $"/api/orders/{orderId}/items", new
 // 10. UC-04 (AC-05): Пошук замовлення за номером та фільтр status=Issued
 Console.WriteLine($"--- 10. UC-04 (AC-05): Пошук замовлення за номером {orderNumber} та фільтр status=Issued ---");
 await SendAsync(HttpMethod.Get, $"/api/orders?status=Issued&orderNumber={orderNumber}");
+
+// 11. Спринт S1: повторне звернення з тим самим пристроєм після видачі
+Console.WriteLine("--- 11. S1: Повторне звернення з тим самим пристроєм після видачі ---");
+await SendAsync(HttpMethod.Post, "/api/orders", new
+{
+    clientFullName = "Петренко Іван Васильович",
+    clientPhone = "+380501234567",
+    deviceBrand = "Apple",
+    deviceModel = "iPhone 15 Pro",
+    serialNumber = serial,
+    issueDescription = "Не заряджається",
+    engineerId = 1
+});
+
+// 12. Спринт S1 (критерій 1): історія ремонтів пристрою — два замовлення від найстарішого
+Console.WriteLine($"--- 12. S1: Історія ремонтів пристрою {serial} ---");
+await SendAsync(HttpMethod.Get, $"/api/devices/{serial}/orders");
+
+// 13. Спринт S1 (критерій 2): відмова для пристрою, який не обслуговувався
+Console.WriteLine("--- 13. S1: Відмова для невідомого серійного номера ---");
+await SendAsync(HttpMethod.Get, "/api/devices/SN-UNKNOWN-0000/orders");
+
+Console.WriteLine($"Для перевірки після перезапуску сервера: dotnet run --project src/ServiceCenter.Client -- history {serial}");

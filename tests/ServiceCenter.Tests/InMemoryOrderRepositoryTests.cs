@@ -125,4 +125,31 @@ public sealed class InMemoryOrderRepositoryTests
         Assert.Equal("order_already_issued", editCode);
         Assert.Equal(500m, store.GetOrderById(created.Id)!.TotalCost);
     }
+
+    // Спринт S1: історія ремонтів пристрою за серійним номером
+    [Fact]
+    public void GetDeviceHistory_ReturnsAllOrdersOfDeviceAndRejectsUnknownSerial_S1()
+    {
+        var store = new InMemoryOrderRepository();
+        var (_, _, _, first) = store.CreateOrder(ValidOrderRequest("SN-HIST-001"));
+        store.ChangeStatus(first!.Id, new ChangeStatusRequest("InProgress"));
+        store.ChangeStatus(first.Id, new ChangeStatusRequest("Ready"));
+        store.ChangeStatus(first.Id, new ChangeStatusRequest("Issued"));
+        var (_, _, _, second) = store.CreateOrder(ValidOrderRequest("sn-hist-001"));
+        store.CreateOrder(ValidOrderRequest("SN-OTHER-002"));
+
+        var (success, _, history) = store.GetDeviceHistory("SN-HIST-001");
+
+        Assert.True(success);
+        Assert.NotNull(history);
+        Assert.Equal(2, history!.Count);
+        Assert.Equal(first.OrderNumber, history[0].OrderNumber);
+        Assert.Equal("Issued", history[0].Status);
+        Assert.Equal(second!.OrderNumber, history[1].OrderNumber);
+
+        var (unknownSuccess, unknownCode, unknownOrders) = store.GetDeviceHistory("SN-UNKNOWN-0000");
+        Assert.False(unknownSuccess);
+        Assert.Equal("device_not_found", unknownCode);
+        Assert.Null(unknownOrders);
+    }
 }
