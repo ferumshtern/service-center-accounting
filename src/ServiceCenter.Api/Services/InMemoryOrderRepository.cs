@@ -1,9 +1,12 @@
-﻿using ServiceCenter.Api.Contracts;
+using ServiceCenter.Api.Contracts;
 using ServiceCenter.Api.Models;
 
 namespace ServiceCenter.Api.Services;
 
-public sealed class ServiceStore
+// Реалізація контракту сховища в пам'яті серверного процесу (v1.0.0).
+// Реєструється як Singleton, щоб дані були спільними для всіх запитів; після
+// зупинки процесу дані втрачаються. Використовується модульними тестами.
+public sealed class InMemoryOrderRepository : IOrderRepository
 {
     private readonly object _gate = new();
 
@@ -22,20 +25,12 @@ public sealed class ServiceStore
         lock (_gate) return _engineers.ToArray();
     }
 
-    // UC-01: Реєстрація замовлення та призначення майстра (Серафим: FR-01, FR-02, AC-01, AC-02)
-    // ErrorDetail уточнює відмову: перелік пропущених полів (A1) або номер активного замовлення (A2).
+    // UC-01: Реєстрація замовлення та призначення майстра (FR-01, FR-02, AC-01, AC-02)
     public (bool Success, string? ErrorCode, string? ErrorDetail, OrderReceiptDto? Order) CreateOrder(CreateOrderRequest req)
     {
-        var missingFields = new List<string>();
-        if (string.IsNullOrWhiteSpace(req.ClientFullName)) missingFields.Add("ПІБ клієнта");
-        if (string.IsNullOrWhiteSpace(req.ClientPhone)) missingFields.Add("телефон клієнта");
-        if (string.IsNullOrWhiteSpace(req.DeviceBrand)) missingFields.Add("бренд пристрою");
-        if (string.IsNullOrWhiteSpace(req.DeviceModel)) missingFields.Add("модель пристрою");
-        if (string.IsNullOrWhiteSpace(req.SerialNumber)) missingFields.Add("серійний номер");
-        if (string.IsNullOrWhiteSpace(req.IssueDescription)) missingFields.Add("опис несправності");
-
-        if (missingFields.Count > 0)
-            return (false, "invalid_request", $"Пропущено: {string.Join(", ", missingFields)}.", null);
+        var missingFields = OrderRequestRules.FindMissingFields(req);
+        if (missingFields is not null)
+            return (false, "invalid_request", missingFields, null);
 
         var normalizedSerial = req.SerialNumber.Trim();
 
@@ -85,7 +80,7 @@ public sealed class ServiceStore
                 deviceId: device.Id,
                 engineerId: engineer.Id,
                 issueDescription: req.IssueDescription.Trim(),
-                createdAt: DateTimeOffset.UtcNow);
+                acceptedAt: DateTimeOffset.UtcNow);
 
             _orders.Add(order);
             return (true, null, null, MapToReceiptDto(order));
@@ -118,11 +113,11 @@ public sealed class ServiceStore
         }
     }
 
-    // UC-02 / UC-03: Послідовна зміна статусу замовлення (Євгенія: FR-04, AC-04).
+    // UC-02 / UC-03: Послідовна зміна статусу замовлення (FR-04, AC-04).
     // Правила переходу перевіряє RepairOrder.ChangeStatus.
     public (bool Success, string? ErrorCode, OrderReceiptDto? Order) ChangeStatus(int orderId, ChangeStatusRequest req)
     {
-        if (!TryParseStatus(req.NewStatus, out var targetStatus))
+        if (!OrderRequestRules.TryParseStatus(req.NewStatus, out var targetStatus))
             return (false, "invalid_status_value", null);
 
         lock (_gate)
@@ -150,7 +145,7 @@ public sealed class ServiceStore
         OrderStatus? parsedStatus = null;
         if (!string.IsNullOrWhiteSpace(status))
         {
-            if (!TryParseStatus(status, out var st))
+            if (!OrderRequestRules.TryParseStatus(status, out var st))
                 return (false, "invalid_status_value", null);
             parsedStatus = st;
         }
@@ -182,38 +177,34 @@ public sealed class ServiceStore
         }
     }
 
-
-    private static bool TryParseStatus(string? value, out OrderStatus status)
+    // Спринт S1: історія ремонтів пристрою за серійним номером
+    public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetDeviceHistory(string serialNumber)
     {
-        status = default;
-        var name = value?.Trim();
-        var match = Enum.GetNames<OrderStatus>()
-            .FirstOrDefault(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase));
-        return match is not null && Enum.TryParse(match, out status);
+        var serial = serialNumber?.Trim() ?? "";
+
+        lock (_gate)
+        {
+            var deviceIds = _devices
+                .Where(d => string.Equals(d.SerialNumber, serial, StringComparison.OrdinalIgnoreCase))
+                .Select(d => d.Id)
+                .ToHashSet();
+
+            if (deviceIds.Count == 0)
+                return (false, "device_not_found", null);
+
+            var result = _orders
+                .Where(o => deviceIds.Contains(o.DeviceId))
+                .OrderBy(o => o.Id)
+                .Select(MapToReceiptDto)
+                .ToArray();
+            return (true, null, result);
+        }
     }
 
-    private OrderReceiptDto MapToReceiptDto(RepairOrder order)
-    {
-        var client = _clients.Single(c => c.Id == order.ClientId);
-        var device = _devices.Single(d => d.Id == order.DeviceId);
-        var engineer = _engineers.Single(e => e.Id == order.EngineerId);
-
-        return new OrderReceiptDto(
-            order.Id,
-            order.OrderNumber,
-            order.Status.ToString(),
-            order.CreatedAt,
-            client.FullName,
-            client.Phone,
-            device.Brand,
-            device.Model,
-            device.SerialNumber,
-            order.IssueDescription,
-            order.DiagnosticNotes,
-            engineer.FullName,
-            order.TotalCost,
-            order.Items.Select(i => new RepairItemDto(i.Id, i.Name, i.Quantity, i.UnitPrice, i.Subtotal)).ToArray(),
-            order.History.Select(h => new StatusHistoryDto(h.Status.ToString(), h.ChangedAt)).ToArray()
-        );
-    }
+    private OrderReceiptDto MapToReceiptDto(RepairOrder order) =>
+        OrderReceiptMapper.ToDto(
+            order,
+            _clients.Single(c => c.Id == order.ClientId),
+            _devices.Single(d => d.Id == order.DeviceId),
+            _engineers.Single(e => e.Id == order.EngineerId));
 }
