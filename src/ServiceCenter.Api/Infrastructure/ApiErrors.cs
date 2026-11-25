@@ -1,4 +1,4 @@
-﻿using ServiceCenter.Api.Contracts;
+using ServiceCenter.Api.Contracts;
 
 namespace ServiceCenter.Api.Infrastructure;
 
@@ -13,6 +13,7 @@ public static class ApiErrors
             "invalid_status_value" => (400, "Невідомий статус замовлення. Допустимі: Accepted, InProgress, Ready, Issued."),
             "engineer_not_found" => (404, "Вказаного сервісного інженера не знайдено."),
             "order_not_found" => (404, "Замовлення з таким ідентифікатором не знайдено."),
+            "device_not_found" => (404, "Пристрій із таким серійним номером ще не обслуговувався."),
             "duplicate_active_order" => (409, "Для пристрою з цим серійним номером вже існує активне (незавершене) замовлення."),
             "order_already_issued" => (409, "Замовлення вже видано клієнту (Issued). Редагування заблоковано."),
             "invalid_status_warning" => (409, "Додавати роботи можна лише у статусі 'В роботі' (InProgress)."),
