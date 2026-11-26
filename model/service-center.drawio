@@ -468,65 +468,237 @@
     </mxGraphModel>
   </diagram>
   <diagram id="dataModelLr5" name="data-model">
-    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2056" dy="997" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="dm-client" value="&lt;b&gt;Client&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Clients&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="40" width="300" height="122" as="geometry" /></mxCell>
-        <mxCell id="dm-client-a0" value="+ Id: int {PK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-client"><mxGeometry y="44" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-client-a1" value="+ FullName: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-client"><mxGeometry y="70" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-client-a2" value="+ Phone: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-client"><mxGeometry y="96" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-device" value="&lt;b&gt;Device&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Devices&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="280" width="300" height="174" as="geometry" /></mxCell>
-        <mxCell id="dm-device-a0" value="+ Id: int {PK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-device"><mxGeometry y="44" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-device-a1" value="+ ClientId: int {FK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-device"><mxGeometry y="70" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-device-a2" value="+ Brand: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-device"><mxGeometry y="96" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-device-a3" value="+ Model: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-device"><mxGeometry y="122" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-device-a4" value="+ SerialNumber: string {index, NOCASE}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-device"><mxGeometry y="148" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-eng" value="&lt;b&gt;ServiceEngineer&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Engineers&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="880" y="40" width="300" height="122" as="geometry" /></mxCell>
-        <mxCell id="dm-eng-a0" value="+ Id: int {PK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-eng"><mxGeometry y="44" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-eng-a1" value="+ FullName: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-eng"><mxGeometry y="70" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-eng-a2" value="+ Specialization: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-eng"><mxGeometry y="96" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order" value="&lt;b&gt;RepairOrder&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Orders&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="460" y="280" width="300" height="304" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a0" value="+ Id: int {PK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="44" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a1" value="+ OrderNumber: string {unique}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="70" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a2" value="+ ClientId: int {FK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="96" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a3" value="+ DeviceId: int {FK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="122" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a4" value="+ EngineerId: int {FK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="148" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a5" value="+ CreatedAt: DateTimeOffset" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="174" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a6" value="+ IssueDescription: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="200" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a7" value="+ DiagnosticNotes: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="226" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a8" value="+ TotalCost: decimal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="252" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-order-a9" value="+ Status: OrderStatus" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-order"><mxGeometry y="278" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-item" value="&lt;b&gt;RepairItem&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» RepairItems&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="200" y="700" width="300" height="174" as="geometry" /></mxCell>
-        <mxCell id="dm-item-a0" value="+ RepairOrderId: int {PK, FK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-item"><mxGeometry y="44" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-item-a1" value="+ Id: int {PK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-item"><mxGeometry y="70" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-item-a2" value="+ Name: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-item"><mxGeometry y="96" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-item-a3" value="+ Quantity: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-item"><mxGeometry y="122" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-item-a4" value="+ UnitPrice: decimal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-item"><mxGeometry y="148" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-hist" value="&lt;b&gt;StatusHistory&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» StatusHistory&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="760" y="700" width="300" height="148" as="geometry" /></mxCell>
-        <mxCell id="dm-hist-a0" value="+ RepairOrderId: int {PK, FK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-hist"><mxGeometry y="44" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-hist-a1" value="+ Id: int {PK}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-hist"><mxGeometry y="70" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-hist-a2" value="+ Status: OrderStatus" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-hist"><mxGeometry y="96" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-hist-a3" value="+ ChangedAt: DateTimeOffset" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="dm-hist"><mxGeometry y="122" width="300" height="26" as="geometry" /></mxCell>
-        <mxCell id="dm-e1" value="власник" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dm-client" target="dm-device"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="dm-e1-s" value="1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e1"><mxGeometry x="-0.9" relative="1" as="geometry"><mxPoint x="6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e1-t" value="0..*" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e1"><mxGeometry x="0.9" relative="1" as="geometry"><mxPoint x="-6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e2" value="замовник" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dm-client" target="dm-order"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="dm-e2-s" value="1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e2"><mxGeometry x="-0.9" relative="1" as="geometry"><mxPoint x="6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e2-t" value="0..*" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e2"><mxGeometry x="0.9" relative="1" as="geometry"><mxPoint x="-6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e3" value="передається в ремонт" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.286;entryDx=0;entryDy=0;" edge="1" parent="1" source="dm-device" target="dm-order"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="dm-e3-s" value="1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e3"><mxGeometry x="-0.9" relative="1" as="geometry"><mxPoint x="6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e3-t" value="0..*" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e3"><mxGeometry x="0.9" relative="1" as="geometry"><mxPoint x="-6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e4" value="виконує" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.286;entryDx=0;entryDy=0;" edge="1" parent="1" source="dm-eng" target="dm-order"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="dm-e4-s" value="1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e4"><mxGeometry x="-0.9" relative="1" as="geometry"><mxPoint x="6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e4-t" value="0..*" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e4"><mxGeometry x="0.9" relative="1" as="geometry"><mxPoint x="-6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e5" value="містить" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=16;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dm-order" target="dm-item"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="dm-e5-s" value="1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e5"><mxGeometry x="-0.9" relative="1" as="geometry"><mxPoint x="6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e5-t" value="0..*" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e5"><mxGeometry x="0.9" relative="1" as="geometry"><mxPoint x="-6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e6" value="фіксує історію" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=16;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dm-order" target="dm-hist"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="dm-e6-s" value="1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e6"><mxGeometry x="-0.9" relative="1" as="geometry"><mxPoint x="6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-e6-t" value="1..*" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="dm-e6"><mxGeometry x="0.9" relative="1" as="geometry"><mxPoint x="-6" y="-4" as="offset" /></mxGeometry></mxCell>
-        <mxCell id="dm-note" value="&lt;b&gt;Модель збережуваних даних (ЛР №5, спринт S1)&lt;/b&gt;&lt;br&gt;Класи відображаються на таблиці SQLite через EF Core (AppDbContext).&lt;br&gt;RepairItem і StatusHistory — частини замовлення (композиція): ключ складається з RepairOrderId та номера в межах замовлення.&lt;br&gt;Status зберігається як текст. Індекс SerialNumber потрібен для історії ремонтів пристрою." style="shape=note;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#fff2cc;strokeColor=#d6b656;size=14;" vertex="1" parent="1"><mxGeometry x="40" y="920" width="1060" height="90" as="geometry" /></mxCell>
+        <mxCell id="dm-client" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Client&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Clients&lt;/i&gt;" vertex="1">
+          <mxGeometry height="122" width="300" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-client-a0" parent="dm-client" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-client-a1" parent="dm-client" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ FullName: string" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-client-a2" parent="dm-client" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Phone: string" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-device" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Device&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Devices&lt;/i&gt;" vertex="1">
+          <mxGeometry height="174" width="300" x="40" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-device-a0" parent="dm-device" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-device-a1" parent="dm-device" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ ClientId: int {FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-device-a2" parent="dm-device" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Brand: string" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-device-a3" parent="dm-device" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Model: string" vertex="1">
+          <mxGeometry height="26" width="300" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-device-a4" parent="dm-device" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ SerialNumber: string {index, NOCASE}" vertex="1">
+          <mxGeometry height="26" width="300" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-eng" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;ServiceEngineer&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Engineers&lt;/i&gt;" vertex="1">
+          <mxGeometry height="122" width="300" x="880" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-eng-a0" parent="dm-eng" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-eng-a1" parent="dm-eng" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ FullName: string" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-eng-a2" parent="dm-eng" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Specialization: string" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;RepairOrder&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» Orders&lt;/i&gt;" vertex="1">
+          <mxGeometry height="304" width="300" x="460" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a0" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a1" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ OrderNumber: string {unique}" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a2" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ ClientId: int {FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a3" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ DeviceId: int {FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a4" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ EngineerId: int {FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a5" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ CreatedAt: DateTimeOffset" vertex="1">
+          <mxGeometry height="26" width="300" y="174" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a6" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ IssueDescription: string" vertex="1">
+          <mxGeometry height="26" width="300" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a7" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ DiagnosticNotes: string" vertex="1">
+          <mxGeometry height="26" width="300" y="226" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a8" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ TotalCost: decimal" vertex="1">
+          <mxGeometry height="26" width="300" y="252" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-order-a9" parent="dm-order" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Status: OrderStatus" vertex="1">
+          <mxGeometry height="26" width="300" y="278" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-item" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;RepairItem&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» RepairItems&lt;/i&gt;" vertex="1">
+          <mxGeometry height="174" width="300" x="200" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-item-a0" parent="dm-item" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ RepairOrderId: int {PK, FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-item-a1" parent="dm-item" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-item-a2" parent="dm-item" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Name: string" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-item-a3" parent="dm-item" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Quantity: int" vertex="1">
+          <mxGeometry height="26" width="300" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-item-a4" parent="dm-item" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ UnitPrice: decimal" vertex="1">
+          <mxGeometry height="26" width="300" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-hist" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;StatusHistory&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» StatusHistory&lt;/i&gt;" vertex="1">
+          <mxGeometry height="148" width="300" x="760" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-hist-a0" parent="dm-hist" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ RepairOrderId: int {PK, FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-hist-a1" parent="dm-hist" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-hist-a2" parent="dm-hist" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Status: OrderStatus" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-hist-a3" parent="dm-hist" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ ChangedAt: DateTimeOffset" vertex="1">
+          <mxGeometry height="26" width="300" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e1" edge="1" parent="1" source="dm-client" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dm-device" value="власник">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e1-s" connectable="0" parent="dm-e1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e1-t" connectable="0" parent="dm-e1" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e2" edge="1" parent="1" source="dm-client" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dm-order" value="замовник">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e2-s" connectable="0" parent="dm-e2" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e2-t" connectable="0" parent="dm-e2" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e3" edge="1" parent="1" source="dm-device" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.286;entryDx=0;entryDy=0;" target="dm-order" value="передається в ремонт">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e3-s" connectable="0" parent="dm-e3" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e3-t" connectable="0" parent="dm-e3" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e4" edge="1" parent="1" source="dm-eng" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.286;entryDx=0;entryDy=0;" target="dm-order" value="виконує">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e4-s" connectable="0" parent="dm-e4" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e4-t" connectable="0" parent="dm-e4" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e5" edge="1" parent="1" source="dm-order" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=16;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dm-item" value="містить">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e5-s" connectable="0" parent="dm-e5" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e5-t" connectable="0" parent="dm-e5" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e6" edge="1" parent="1" source="dm-order" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=16;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dm-hist" value="фіксує історію">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e6-s" connectable="0" parent="dm-e6" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e6-t" connectable="0" parent="dm-e6" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-wc" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;WarrantyClaim&lt;/b&gt;&lt;br&gt;&lt;i&gt;«table» WarrantyClaims&lt;/i&gt;" vertex="1">
+          <mxGeometry height="148" width="300" x="880" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-wc-a0" parent="dm-wc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ Id: int {PK}" vertex="1">
+          <mxGeometry height="26" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-wc-a1" parent="dm-wc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ OriginalOrderId: int {FK, unique}" vertex="1">
+          <mxGeometry height="26" width="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-wc-a2" parent="dm-wc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ WarrantyOrderId: int {FK}" vertex="1">
+          <mxGeometry height="26" width="300" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-wc-a3" parent="dm-wc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="+ ClaimedAt: DateTimeOffset" vertex="1">
+          <mxGeometry height="26" width="300" y="122" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e7" edge="1" parent="1" source="dm-order" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.55;exitDx=0;exitDy=0;entryX=0;entryY=0.318;entryDx=0;entryDy=0;" target="dm-wc" value="видане">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e7-s" connectable="0" parent="dm-e7" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e7-t" connectable="0" parent="dm-e7" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e8" edge="1" parent="1" source="dm-order" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.831;entryDx=0;entryDy=0;" target="dm-wc" value="гарантійне">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dm-e8-s" connectable="0" parent="dm-e8" style="edgeLabel;resizable=0;html=1;fontSize=12;align=left;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.9" as="geometry">
+            <mxPoint x="6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dm-e8-t" connectable="0" parent="dm-e8" style="edgeLabel;resizable=0;html=1;fontSize=12;align=right;verticalAlign=bottom;" value="0..1" vertex="1">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint x="-6" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

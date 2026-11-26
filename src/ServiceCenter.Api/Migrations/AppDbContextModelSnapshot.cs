@@ -147,6 +147,30 @@ namespace ServiceCenter.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ServiceCenter.Api.Models.WarrantyClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("ClaimedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OriginalOrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WarrantyOrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OriginalOrderId")
+                        .IsUnique();
+
+                    b.HasIndex("WarrantyOrderId");
+
+                    b.ToTable("WarrantyClaims", (string)null);
+                });
+
             modelBuilder.Entity("ServiceCenter.Api.Models.Device", b =>
                 {
                     b.HasOne("ServiceCenter.Api.Models.Client", null)
@@ -228,6 +252,21 @@ namespace ServiceCenter.Api.Migrations
                     b.Navigation("History");
 
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("ServiceCenter.Api.Models.WarrantyClaim", b =>
+                {
+                    b.HasOne("ServiceCenter.Api.Models.RepairOrder", null)
+                        .WithMany()
+                        .HasForeignKey("OriginalOrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ServiceCenter.Api.Models.RepairOrder", null)
+                        .WithMany()
+                        .HasForeignKey("WarrantyOrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
