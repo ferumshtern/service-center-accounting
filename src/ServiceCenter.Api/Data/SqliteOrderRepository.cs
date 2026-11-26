@@ -38,15 +38,9 @@ public sealed class SqliteOrderRepository : IOrderRepository
             return (false, "engineer_not_found", null, null);
 
         // AC-02: чи є активне замовлення (не Issued) для цього серійного номера (без урахування регістру — NOCASE)
-        var activeOrder = _db.Orders
-            .Where(o => o.Status != OrderStatus.Issued &&
-                        _db.Devices.Any(d => d.Id == o.DeviceId && d.SerialNumber == normalizedSerial))
-            .Select(o => new { o.OrderNumber, o.Status })
-            .FirstOrDefault();
-
+        var activeOrder = OrderQueries.FindActiveOrder(_db, normalizedSerial);
         if (activeOrder is not null)
-            return (false, "duplicate_active_order",
-                $"Активне замовлення: {activeOrder.OrderNumber} (статус {activeOrder.Status}).", null);
+            return (false, "duplicate_active_order", activeOrder, null);
 
         var client = new Client
         {
@@ -184,7 +178,7 @@ public sealed class SqliteOrderRepository : IOrderRepository
         return (true, null, orders.Select(MapToReceiptDto).ToArray());
     }
 
-    private static int NextId(IQueryable<int?> ids) => (ids.Max() ?? 0) + 1;
+    private static int NextId(IQueryable<int?> ids) => OrderQueries.NextId(ids);
 
     private OrderReceiptDto MapToReceiptDto(RepairOrder order) =>
         OrderReceiptMapper.ToDto(

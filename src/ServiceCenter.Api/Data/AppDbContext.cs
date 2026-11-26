@@ -15,6 +15,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<Device> Devices => Set<Device>();
     public DbSet<ServiceEngineer> Engineers => Set<ServiceEngineer>();
     public DbSet<RepairOrder> Orders => Set<RepairOrder>();
+    public DbSet<WarrantyClaim> WarrantyClaims => Set<WarrantyClaim>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -91,6 +92,18 @@ public sealed class AppDbContext : DbContext
             // Колекції відкриті лише для читання, тому EF Core працює з полями _items та _history.
             entity.Navigation(o => o.Items).UsePropertyAccessMode(PropertyAccessMode.Field);
             entity.Navigation(o => o.History).UsePropertyAccessMode(PropertyAccessMode.Field);
+        });
+
+        // Спринт S2: гарантійне звернення посилається на видане та на нове гарантійне замовлення.
+        // Унікальний індекс: за одним виданим замовленням — не більше одного гарантійного звернення.
+        modelBuilder.Entity<WarrantyClaim>(entity =>
+        {
+            entity.ToTable("WarrantyClaims");
+            entity.HasKey(c => c.Id);
+            entity.Property(c => c.Id).ValueGeneratedNever();
+            entity.HasIndex(c => c.OriginalOrderId).IsUnique();
+            entity.HasOne<RepairOrder>().WithMany().HasForeignKey(c => c.OriginalOrderId).OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne<RepairOrder>().WithMany().HasForeignKey(c => c.WarrantyOrderId).OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

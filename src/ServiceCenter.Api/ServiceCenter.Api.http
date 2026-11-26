@@ -47,3 +47,13 @@ GET {{ServiceCenter.Api_HostAddress}}/api/orders?status=InProgress&orderNumber=S
 Accept: application/json
 
 ###
+
+# S2: гарантійне звернення
+@issuedOrderId = 16
+
+POST {{ServiceCenter.Api_HostAddress}}/api/orders/{{issuedOrderId}}/warranty-claims
+Content-Type: application/json
+
+{ "issueDescription": "Знову не вмикається" }
+
+###

@@ -14,6 +14,7 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(DatabaseConnection.Resolve(builder.Configuration)));
 builder.Services.AddScoped<IOrderRepository, SqliteOrderRepository>();
+builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 
 builder.Services.Configure<RouteHandlerOptions>(o => o.ThrowOnBadRequest = true);
 
@@ -91,6 +92,15 @@ app.MapGet("/api/devices/{serialNumber}/orders", (string serialNumber, IOrderRep
 {
     var (success, errorCode, orders) = store.GetDeviceHistory(serialNumber);
     return success ? Results.Ok(orders) : ApiErrors.Result(errorCode!);
+});
+
+// Спринт S2: гарантійне звернення за виданим замовленням
+app.MapPost("/api/orders/{id:int}/warranty-claims", (int id, WarrantyClaimRequest request, IWarrantyService warranty) =>
+{
+    var (success, errorCode, errorDetail, order) = warranty.CreateClaim(id, request);
+    return success
+        ? Results.Created($"/api/orders/{order!.Id}", order)
+        : ApiErrors.Result(errorCode!, errorDetail);
 });
 
 app.Run();
