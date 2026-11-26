@@ -130,7 +130,7 @@ public sealed class SqliteOrderRepository : IOrderRepository
     }
 
     // UC-04 (FR-05, AC-05)
-    public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber)
+    public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber, string? phone = null)
     {
         IQueryable<RepairOrder> query = _db.Orders.AsNoTracking();
 
@@ -145,6 +145,12 @@ public sealed class SqliteOrderRepository : IOrderRepository
         {
             var pattern = $"%{orderNumber.Trim()}%";
             query = query.Where(o => EF.Functions.Like(o.OrderNumber, pattern));
+        }
+
+        if (!string.IsNullOrWhiteSpace(phone))
+        {
+            var phoneTerm = phone.Trim();
+            query = query.Where(o => _db.Clients.Any(c => c.Id == o.ClientId && c.Phone.Contains(phoneTerm)));
         }
 
         var orders = query.OrderBy(o => o.Id).ToList();

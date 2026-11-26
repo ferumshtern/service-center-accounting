@@ -139,7 +139,7 @@ public sealed class InMemoryOrderRepository : IOrderRepository
     }
 
     // UC-04: Пошук за номером замовлення та фільтрація за статусом (FR-05, AC-05)
-    public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber)
+    public (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber, string? phone = null)
     {
         OrderStatus? parsedStatus = null;
         if (!string.IsNullOrWhiteSpace(status))
@@ -160,6 +160,12 @@ public sealed class InMemoryOrderRepository : IOrderRepository
             {
                 var term = orderNumber.Trim();
                 query = query.Where(o => o.OrderNumber.Contains(term, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                var phoneTerm = phone.Trim();
+                query = query.Where(o => _clients.Single(c => c.Id == o.ClientId).Phone.Contains(phoneTerm));
             }
 
             var result = query.OrderBy(o => o.Id).Select(MapToReceiptDto).ToArray();

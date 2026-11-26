@@ -152,4 +152,21 @@ public sealed class InMemoryOrderRepositoryTests
         Assert.Equal("device_not_found", unknownCode);
         Assert.Null(unknownOrders);
     }
+
+    // Спринт S2 (#8): пошук замовлень за фрагментом телефону клієнта
+    [Fact]
+    public void GetOrders_FilterByPhoneFragment_ReturnsClientOrdersOrEmptyList_S2()
+    {
+        var store = new InMemoryOrderRepository();
+        store.CreateOrder(ValidOrderRequest("SN-PHONE-001"));
+        store.CreateOrder(ValidOrderRequest("SN-PHONE-002"));
+        store.CreateOrder(ValidOrderRequest("SN-PHONE-003") with { ClientPhone = "+380670000000" });
+
+        var (success, _, found) = store.GetOrders(null, null, "991112233");
+        var (_, _, none) = store.GetOrders(null, null, "111111111");
+
+        Assert.True(success);
+        Assert.Equal(2, found!.Count);
+        Assert.Empty(none!);
+    }
 }

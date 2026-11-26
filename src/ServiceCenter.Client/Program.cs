@@ -154,7 +154,7 @@ await SendAsync(HttpMethod.Get, $"/api/orders?status=Issued&orderNumber={orderNu
 
 // 11. Спринт S1: повторне звернення з тим самим пристроєм після видачі
 Console.WriteLine("--- 11. S1: Повторне звернення з тим самим пристроєм після видачі ---");
-await SendAsync(HttpMethod.Post, "/api/orders", new
+var (_, body11) = await SendAsync(HttpMethod.Post, "/api/orders", new
 {
     clientFullName = "Петренко Іван Васильович",
     clientPhone = "+380501234567",
@@ -173,4 +173,45 @@ await SendAsync(HttpMethod.Get, $"/api/devices/{serial}/orders");
 Console.WriteLine("--- 13. S1: Відмова для невідомого серійного номера ---");
 await SendAsync(HttpMethod.Get, "/api/devices/SN-UNKNOWN-0000/orders");
 
+// Спринт S2: гарантійне звернення. Окремий пристрій, бо для першого вже є активне замовлення з кроку 11.
+var serial2 = $"SN-SAM-{DateTime.Now:yyyyMMddHHmmss}";
+
+// 14. Підготовка: замовлення другого пристрою проведено до видачі
+Console.WriteLine($"--- 14. S2: Підготовка — замовлення пристрою {serial2} проведено до видачі ---");
+var (_, body14) = await SendAsync(HttpMethod.Post, "/api/orders", new
+{
+    clientFullName = "Петренко Іван Васильович",
+    clientPhone = "+380501234567",
+    deviceBrand = "Samsung",
+    deviceModel = "Galaxy S24",
+    serialNumber = serial2,
+    issueDescription = "Не вмикається після падіння",
+    engineerId = 2
+});
+using var doc14 = JsonDocument.Parse(body14);
+int issuedOrderId = doc14.RootElement.GetProperty("id").GetInt32();
+await SendAsync(HttpMethod.Patch, $"/api/orders/{issuedOrderId}/status", new { newStatus = "InProgress" });
+await SendAsync(HttpMethod.Patch, $"/api/orders/{issuedOrderId}/status", new { newStatus = "Ready" });
+await SendAsync(HttpMethod.Patch, $"/api/orders/{issuedOrderId}/status", new { newStatus = "Issued" });
+
+// 15. S2 (критерій 1): гарантійне звернення в день видачі — нове замовлення
+Console.WriteLine("--- 15. S2: Гарантійне звернення за виданим замовленням ---");
+await SendAsync(HttpMethod.Post, $"/api/orders/{issuedOrderId}/warranty-claims", new { issueDescription = "Знову не вмикається" });
+
+// 16. S2 (критерій 4): повторне гарантійне звернення за тим самим замовленням
+Console.WriteLine("--- 16. S2: Відмова при повторному гарантійному зверненні ---");
+await SendAsync(HttpMethod.Post, $"/api/orders/{issuedOrderId}/warranty-claims", new { issueDescription = "Ще раз" });
+
+// 17. S2 (критерій 3): гарантійне звернення за замовленням, яке ще не видане (крок 11)
+Console.WriteLine("--- 17. S2: Відмова для невиданого замовлення ---");
+using var doc11 = JsonDocument.Parse(body11);
+int activeOrderId = doc11.RootElement.GetProperty("id").GetInt32();
+await SendAsync(HttpMethod.Post, $"/api/orders/{activeOrderId}/warranty-claims", new { issueDescription = "Не заряджається" });
+
+// 18. S2 (#8): пошук замовлень за фрагментом телефону клієнта
+Console.WriteLine("--- 18. S2: Пошук замовлень за телефоном 501234567 та за телефоном без збігів ---");
+await SendAsync(HttpMethod.Get, "/api/orders?phone=501234567");
+await SendAsync(HttpMethod.Get, "/api/orders?phone=111111111");
+
 Console.WriteLine($"Для перевірки після перезапуску сервера: dotnet run --project src/ServiceCenter.Client -- history {serial}");
+Console.WriteLine($"Гарантійне замовлення в історії пристрою: dotnet run --project src/ServiceCenter.Client -- history {serial2}");
