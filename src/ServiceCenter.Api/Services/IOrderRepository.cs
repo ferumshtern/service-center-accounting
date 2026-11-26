@@ -17,8 +17,8 @@ public interface IOrderRepository
     // UC-02 / UC-03 (FR-04)
     (bool Success, string? ErrorCode, OrderReceiptDto? Order) ChangeStatus(int orderId, ChangeStatusRequest req);
 
-    // UC-04 (FR-05)
-    (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber);
+    // UC-04 (FR-05); спринт S2: phone — пошук за фрагментом телефону клієнта.
+    (bool Success, string? ErrorCode, IReadOnlyList<OrderReceiptDto>? Orders) GetOrders(string? status, string? orderNumber, string? phone = null);
 
     OrderReceiptDto? GetOrderById(int orderId);
 

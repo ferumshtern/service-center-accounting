@@ -50,10 +50,10 @@ app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 // Отримання переліку сервісних інженерів
 app.MapGet("/api/engineers", (IOrderRepository store) => Results.Ok(store.GetEngineers()));
 
-// UC-04: Перелік замовлень з фільтрацією за статусом та пошуком за номером (FR-05, AC-05)
-app.MapGet("/api/orders", (string? status, string? orderNumber, IOrderRepository store) =>
+// UC-04: Перелік замовлень з фільтрацією за статусом та пошуком за номером (FR-05, AC-05); S2: пошук за телефоном
+app.MapGet("/api/orders", (string? status, string? orderNumber, string? phone, IOrderRepository store) =>
 {
-    var (success, errorCode, orders) = store.GetOrders(status, orderNumber);
+    var (success, errorCode, orders) = store.GetOrders(status, orderNumber, phone);
     return success ? Results.Ok(orders) : ApiErrors.Result(errorCode!);
 });
 

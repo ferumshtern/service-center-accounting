@@ -82,6 +82,7 @@
                         <span class="fw-bold">UC-04: Перелік замовлень</span>
                         <div class="d-flex gap-2">
                             <input type="text" id="searchNumber" class="form-control form-control-sm" placeholder="Пошук (напр. SC-0001)">
+                            <input type="text" id="searchPhone" class="form-control form-control-sm" placeholder="Телефон (напр. 501234567)">
                             <select id="filterStatus" class="form-select form-select-sm">
                                 <option value="">Усі статуси</option>
                                 <option value="Accepted">Прийнято (Accepted)</option>
@@ -141,6 +142,13 @@
                                 <button class="btn btn-outline-dark" onclick="changeStatus('Issued')">Видати клієнту (Issued)</button>
                             </div>
                         </div>
+
+                        <!-- Спринт S2: гарантійне звернення за виданим замовленням -->
+                        <form id="warrantyForm" class="mb-3 p-2 bg-light border rounded d-flex gap-2 align-items-center">
+                            <span class="small fw-bold text-nowrap">S2: Гарантійне звернення (до 90 днів після видачі):</span>
+                            <input type="text" id="warrantyIssue" class="form-control form-control-sm" placeholder="Опис несправності" required>
+                            <button type="submit" class="btn btn-outline-warning btn-sm text-nowrap">Оформити</button>
+                        </form>
 
                         <!-- Додавання робіт та запчастин (UC-02) -->
                         <form id="addItemForm" class="row g-2 mb-3 align-items-end border-bottom pb-3">
@@ -205,6 +213,8 @@ async function loadOrders() {
     const params = new URLSearchParams();
     if (status) params.append('status', status);
     if (num) params.append('orderNumber', num);
+    const phone = document.getElementById('searchPhone').value.trim();
+    if (phone) params.append('phone', phone);
 
     const res = await fetch(`/api/orders?${params.toString()}`);
     const orders = await res.json();
@@ -319,6 +329,25 @@ document.getElementById('deviceHistoryForm').addEventListener('submit', async (e
                 <button class="btn btn-link btn-sm p-0" onclick="selectOrder(${o.id})">Картка</button></span>
         </li>
     `).join('');
+});
+
+document.getElementById('warrantyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!selectedOrderId) return;
+    const res = await fetch(`/api/orders/${selectedOrderId}/warranty-claims`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ issueDescription: document.getElementById('warrantyIssue').value })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+        showAlert(`Відмова (${data.code}): ${data.message}`, true);
+        return;
+    }
+    document.getElementById('warrantyIssue').value = '';
+    showAlert(`Оформлено гарантійне замовлення ${data.orderNumber}`, false);
+    await loadOrders();
+    await selectOrder(data.id);
 });
 
 async function changeStatus(newStatus) {
